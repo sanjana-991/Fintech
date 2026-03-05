@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Expense Tracker</title>
+
+  <link rel="stylesheet" href="expense.css">
+
+  <!-- Chart.js MUST be before JS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<header class="navbar">
+  <h1>Expense Tracker</h1>
+</header>
+
+<main class="dashboard">
+
+  <section class="summary-cards">
+    <div class="summary-card">
+      <h4>Remaining Balance</h4>
+      <p id="balance">₹0</p>
+    </div>
+
+    <div class="summary-card">
+      <h4>Total Expense</h4>
+      <p id="totalExpense">₹0</p>
+    </div>
+
+    <div class="summary-card">
+      <h4>Monthly Budget</h4>
+      <p>₹50000</p>
+    </div>
+  </section>
+
+  <section class="main-grid">
+
+    <div class="left-column">
+      <div class="card">
+        <h3>Add Expense</h3>
+
+        <input id="titleInput" placeholder="Expense Title">
+        <input id="amountInput" type="number" placeholder="Amount">
+
+        <select id="categoryInput">
+          <option>Food</option>
+          <option>Travel</option>
+          <option>Shopping</option>
+          <option>Bills</option>
+          <option>Other</option>
+        </select>
+
+        <button onclick="addExpense()">Add Expense</button>
+      </div>
+
+      <div class="card">
+        <h3>Recent Transactions</h3>
+        <ul id="expenseList"></ul>
+      </div>
+    </div>
+
+    <div class="right-column">
+      <div class="card">
+        <canvas id="pieChart"></canvas>
+      </div>
+
+      <div class="card">
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- JS MUST be last -->
+<script src="expense.js"></script>
+</body>
+</html>
