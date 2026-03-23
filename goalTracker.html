@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Goal Tracker</title>
+
+<link rel="stylesheet" href="goal.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<header class="navbar">
+  <h1>Goal Tracker</h1>
+  <button onclick="toggleTheme()">🌙</button>
+</header>
+
+<main class="dashboard">
+
+  <section class="main-grid">
+
+    <!-- LEFT -->
+    <div class="left-column">
+
+      <!-- CREATE GOAL -->
+      <div class="card">
+        <h3>Create Goal</h3>
+
+        <div class="create-goal-form">
+
+          <input id="goalName" placeholder="Goal Name" maxlength="30">
+          <input id="targetAmount" type="number" placeholder="Target Amount">
+
+          <input id="initialSavings" type="number" placeholder="Initial Savings">
+          <input id="deadline" type="date">
+
+          <small class="full-width" id="charCount">0/30</small>
+
+          <button onclick="addGoal()">Create Goal</button>
+
+        </div>
+      </div>
+
+      <!-- GOALS -->
+      <div class="card">
+        <h3>Goals</h3>
+        <div id="goalsContainer" class="goals-list"></div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-column">
+
+      <div class="card">
+        <canvas id="barChart"></canvas>
+      </div>
+
+      <div class="card">
+        <canvas id="lineChart"></canvas>
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<script src="goal.js"></script>
+</body>
+</html>
