@@ -133,18 +133,20 @@ function showResult() {
 
   // Submit button action
   submitBtn.onclick = () => {
-    const userFeedback = feedback.value;
+  const userFeedback = feedback.value;
 
-    if (userFeedback.trim() === "") {
-      alert("Please enter feedback before submitting.");
-      return;
-    }
+  // Feedback is optional now → no validation
 
-    // Simulate submission
-    optionsEl.innerHTML = `
-      <h3>🎉 Thank you!</h3>
-      <p>Your feedback has been submitted successfully.</p>
-    `;
-  };
+  // Show thank you message briefly
+  optionsEl.innerHTML = `
+    <h3>🎉 Thank you!</h3>
+    <p>Your response has been recorded.</p>
+  `;
+
+  // Redirect after 2 seconds
+  setTimeout(() => {
+    window.location.href = "home.html";
+  }, 2000);
+};
 }
 loadQuestion();
