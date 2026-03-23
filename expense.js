@@ -2,13 +2,16 @@ const titleInput = document.getElementById("titleInput");
 const amountInput = document.getElementById("amountInput");
 const categoryInput = document.getElementById("categoryInput");
 
+// LOAD EXPENSES FROM LOCAL STORAGE
 let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
+// FIXED MONTHLY INCOME
 const totalIncome = 50000;
 
+// CHART INSTANCES
 let barChart, pieChart;
 
-// ADD EXPENSE
+// ADD EXPENSE FUNCTION
 function addExpense() {
   const title = titleInput.value;
   const amount = Number(amountInput.value);
@@ -19,10 +22,7 @@ function addExpense() {
     return;
   }
 
-  const timestamp = new Date();
-
-  expenses.push({ title, amount, category, timestamp });
-
+  expenses.push({ title, amount, category });
   localStorage.setItem("expenses", JSON.stringify(expenses));
 
   titleInput.value = "";
@@ -31,7 +31,7 @@ function addExpense() {
   render();
 }
 
-// RENDER
+// RENDER UI
 function render() {
   const list = document.getElementById("expenseList");
   list.innerHTML = "";
@@ -39,42 +39,17 @@ function render() {
   let total = 0;
   let categoryTotals = {};
 
-  const now = new Date();
-
-  const filteredExpenses = expenses
-    .filter(e => {
-      const d = new Date(e.timestamp);
-      return d.getMonth() === now.getMonth() &&
-             d.getFullYear() === now.getFullYear();
-    })
-    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-    .slice(0, 7);
-
-  filteredExpenses.forEach(e => {
-    const expenseDate = new Date(e.timestamp);
-
+  expenses.forEach(e => {
     total += e.amount;
 
     categoryTotals[e.category] =
       (categoryTotals[e.category] || 0) + e.amount;
 
-    const formattedDate = expenseDate.toLocaleString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-
     const li = document.createElement("li");
     li.innerHTML = `
-      <div>
-        <strong>${e.title}</strong><br>
-        <small>${e.category} • ${formattedDate}</small>
-      </div>
+      <span>${e.title} (${e.category})</span>
       <span>₹${e.amount}</span>
     `;
-
     list.appendChild(li);
   });
 
@@ -84,7 +59,7 @@ function render() {
   drawCharts(categoryTotals);
 }
 
-// CHARTS
+// DRAW CHARTS
 function drawCharts(data) {
   const labels = Object.keys(data);
   const values = Object.values(data);
@@ -103,7 +78,9 @@ function drawCharts(data) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false
+      plugins: {
+        legend: { display: false }
+      }
     }
   });
 
@@ -123,11 +100,10 @@ function drawCharts(data) {
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false
+      responsive: true
     }
   });
 }
 
-// INIT
+// INITIAL RENDER
 render();

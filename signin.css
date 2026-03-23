@@ -9,12 +9,15 @@ body {
   color: #e5e7eb;
 }
 
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .auth-card {
-  background: linear-gradient(
-    180deg,
-    #020617,
-    #064a61
-  );
+  background: linear-gradient(180deg, #020617, #064a61);
   padding: 40px;
   width: 360px;
   border-radius: 20px;
@@ -40,18 +43,31 @@ body {
   color: #94d2bd;
 }
 
+/* Password eye icon spacing */
+.auth-card div {
+  position: relative;
+}
+
+.auth-card span {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
 .auth-card button {
   width: 100%;
   padding: 14px;
   margin-top: 16px;
   border-radius: 14px;
   border: none;
-  background: radial-gradient(
-    circle at 30% 25%,
-    #118ab2 0%,
-    #06d6a0 100%
-  );
+  background: radial-gradient(circle at 30% 25%, #118ab2 0%, #06d6a0 100%);
   color: white;
   font-weight: 600;
   cursor: pointer;
+}
+
+.auth-card button:hover {
+  opacity: 0.9;
 }
