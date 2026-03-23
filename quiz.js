@@ -122,7 +122,7 @@ function showResult() {
   // Live character counter
   feedback.addEventListener("input", function() {
     let length = feedback.value.length;
-    counter.innerText = length + " / 200 characters";
+    counter.innerText = length + " / 500 characters";
 
     if (length > 150) {
       counter.style.color = "#ff6b6b";
