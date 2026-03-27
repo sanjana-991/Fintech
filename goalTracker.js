@@ -1,135 +1,99 @@
-if (localStorage.getItem("theme") === "dark") {
-  document.body.classList.add("dark");
-}
-
-const goalName = document.getElementById("goalName");
-const charCount = document.getElementById("charCount");
-
-goalName.addEventListener("input", () => {
-  charCount.innerText = `${goalName.value.length}/30`;
-});
-
 let goals = JSON.parse(localStorage.getItem("goals")) || [];
 
-let barChart, lineChart;
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+}
 
-// ADD GOAL
 function addGoal() {
-  if (!goalName.value || !targetAmount.value) {
-    alert("Fill required fields");
+  const name = document.getElementById("goalName").value.trim();
+  const target = +document.getElementById("targetAmount").value;
+  const saved = +document.getElementById("initialSavings").value;
+  const deadline = document.getElementById("deadline").value;
+
+  if (!name || !target || !deadline) {
+    alert("Please fill all required fields");
     return;
   }
 
   const goal = {
-    id: Date.now(),
-    name: goalName.value,
-    target: Number(targetAmount.value),
-    saved: Number(initialSavings.value) || 0,
-    deadline: deadline.value,
+    name,
+    target,
+    saved,
+    deadline,
     history: []
   };
 
   goals.push(goal);
+  saveGoals();
+  clearInputs();
+}
 
+function saveGoals() {
+  localStorage.setItem("goals", JSON.stringify(goals));
+  updateUI();
+}
+
+function clearInputs() {
   goalName.value = "";
   targetAmount.value = "";
   initialSavings.value = "";
-
-  save();
+  deadline.value = "";
 }
 
-// ADD MONEY
-function addMoney(id) {
-  const goal = goals.find(g => g.id === id);
-
-  if (goal.saved >= goal.target) return; // PREVENT ADD
-
-  const amount = Number(prompt("Enter amount"));
-  if (!amount) return;
-
-  goal.saved += amount;
-
-  goal.history.push({
-    amount,
-    time: new Date()
-  });
-
-  if (goal.saved >= goal.target) {
-    alert("🎉 Congratulations! Goal Achieved!");
-  }
-
-  save();
-}
-
-// DELETE
-function deleteGoal(id) {
-  goals = goals.filter(g => g.id !== id);
-  save();
-}
-
-// THEME
-function toggleTheme() {
-  document.body.classList.toggle("dark");
-  localStorage.setItem("theme",
-    document.body.classList.contains("dark") ? "dark" : "light"
-  );
-}
-
-// RENDER
-function render() {
+function updateUI() {
   const container = document.getElementById("goalsContainer");
   container.innerHTML = "";
 
-  let labels = [];
-  let values = [];
-
-  goals.forEach(g => {
-
-    const percent = (g.saved / g.target) * 100;
-    const remaining = g.target - g.saved;
-    const isCompleted = g.saved >= g.target;
-
-    const daysLeft = Math.ceil(
-      (new Date(g.deadline) - new Date()) / (1000*60*60*24)
-    );
+  goals.forEach((g, index) => {
+    const percent = Math.min((g.saved / g.target) * 100, 100);
 
     const div = document.createElement("div");
     div.className = "goal-item";
 
     div.innerHTML = `
-      <h4>${g.name}</h4>
-      <p>₹${g.saved} / ₹${g.target}</p>
-      <p>${percent.toFixed(1)}% • Remaining ₹${remaining < 0 ? 0 : remaining}</p>
-      <p>⏳ ${daysLeft} days left</p>
+      <strong>${g.name}</strong><br>
+      ₹${g.saved} / ₹${g.target}
 
       <div class="progress">
         <div class="progress-fill" style="width:${percent}%"></div>
       </div>
 
-      <button onclick="addMoney(${g.id})" ${isCompleted ? "disabled" : ""}>
-        ${isCompleted ? "Completed" : "Add"}
-      </button>
+      <small>Deadline: ${g.deadline}</small><br>
 
-      <button onclick="deleteGoal(${g.id})">Delete</button>
-
-      <div class="history">
-        ${g.history.map(h => `
-          <div>₹${h.amount} - ${new Date(h.time).toLocaleString()}</div>
-        `).join("")}
-      </div>
+      <input type="number" placeholder="Add savings" id="add-${index}">
+      <button onclick="addSavings(${index})">Add</button>
+      <button onclick="deleteGoal(${index})">Delete</button>
     `;
 
     container.appendChild(div);
-
-    labels.push(g.name);
-    values.push(g.saved);
   });
 
-  drawCharts(labels, values);
+  updateCharts();
 }
 
-// CHARTS
-function drawCharts(labels, values) {
+function addSavings(index) {
+  const input = document.getElementById(`add-${index}`);
+  const amount = +input.value;
+
+  if (!amount) return;
+
+  goals[index].saved += amount;
+  goals[index].history.push(amount);
+
+  saveGoals();
+}
+
+function deleteGoal(index) {
+  goals.splice(index, 1);
+  saveGoals();
+}
+
+/* CHARTS */
+let barChart, lineChart;
+
+function updateCharts() {
+  const names = goals.map(g => g.name);
+  const savedData = goals.map(g => g.saved);
 
   if (barChart) barChart.destroy();
   if (lineChart) lineChart.destroy();
@@ -137,43 +101,24 @@ function drawCharts(labels, values) {
   barChart = new Chart(document.getElementById("barChart"), {
     type: "bar",
     data: {
-      labels,
+      labels: names,
       datasets: [{
-        data: values,
-        backgroundColor: [
-          "rgba(0,180,216,0.8)",
-          "rgba(34,197,94,0.8)",
-          "rgba(124,58,237,0.8)",
-          "rgba(239,68,68,0.8)"
-        ],
-        borderRadius: 12
+        label: "Savings",
+        data: savedData
       }]
-    },
-    options: {
-      plugins: { legend: { display: false } },
-      animation: { duration: 1200 }
     }
   });
 
   lineChart = new Chart(document.getElementById("lineChart"), {
     type: "line",
     data: {
-      labels,
+      labels: names,
       datasets: [{
-        data: values,
-        borderColor: "#00b4d8",
-        backgroundColor: "rgba(0,180,216,0.2)",
-        fill: true,
-        tension: 0.4
+        label: "Progress",
+        data: savedData
       }]
     }
   });
 }
 
-// SAVE
-function save() {
-  localStorage.setItem("goals", JSON.stringify(goals));
-  render();
-}
-
-render();
+updateUI();
