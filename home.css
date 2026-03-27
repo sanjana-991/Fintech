@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap");
+@import url("https://fonts.googleapis.com");
 
 * {
   margin: 0;
@@ -13,7 +13,7 @@ body {
   color: #fff;
   font-family: 'Inter', sans-serif;
   height: 100vh;
-  overflow: hidden;
+  overflow: hidden; /* Prevents scrollbars from orbit width */
 }
 
 /* --- NAVIGATION --- */
@@ -27,7 +27,9 @@ body {
   z-index: 100;
 }
 .logo { font-weight: 600; letter-spacing: 2px; }
-.links a { color: #9ca3af; margin: 0 20px; font-size: 14px; text-decoration: none; }
+.links a { color: #9ca3af; margin: 0 20px; font-size: 14px; text-decoration: none; transition: 0.3s; }
+.links a:hover { color: #fff; }
+
 .cta {
   display: flex; gap: 10px; background: transparent; border: 1px solid rgba(255,255,255,0.2);
   color: #fff; padding: 10px 24px; border-radius: 999px; cursor: pointer;
@@ -43,7 +45,6 @@ body {
   justify-content: center;
 }
 
-/* The Orbit Container is a perfect square centered on the screen */
 .orbit-container {
   position: absolute;
   width: 1400px; 
@@ -51,10 +52,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: none;
+  pointer-events: none; /* Allows clicking things behind the container */
 }
 
-/* Precise Rotations */
 .orbit-1 { transform: rotate(-12deg); }
 .orbit-2 { transform: rotate(12deg); }
 
@@ -71,7 +71,7 @@ body {
 /* --- THE PILL BOXES --- */
 .pill-box {
   position: absolute;
-  pointer-events: all;
+  pointer-events: all; /* Re-enables clicking on the boxes */
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -80,6 +80,8 @@ body {
   width: 260px;
   min-height: 170px;
   border: 1px solid rgba(255, 255, 255, 0.3);
+  text-decoration: none; /* Fixes link underline */
+  color: #fff; /* Fixes link color */
   box-shadow: 
     inset 10px 10px 20px rgba(255,255,255,0.15),
     inset -10px -10px 20px rgba(0,0,0,0.3),
@@ -87,75 +89,62 @@ body {
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* GEOMETRY FIX: 
-   Instead of 'left: 10%', we use translateX. 
-   This moves the boxes away from the center of the orbit line perfectly.
-*/
-.p-left  { transform: translateX(-550px); }
-.p-right { transform: translateX(550px); }
+/* --- PLACEMENT AND COUNTER-ROTATION --- */
+/* Orbit 1 Placement */
+.orbit-1 .p-left  { transform: translateX(-550px) rotate(12deg); }
+.orbit-1 .p-right { transform: translateX(550px) rotate(12deg); }
 
-/* COUNTER-ROTATION: 
-   We wrap the content so the box itself stays aligned with the orbit 
-   but the visuals look straight to the user.
-*/
-.orbit-1 .pill-box { transform: translateX(-550px) rotate(12deg); }
-.orbit-1 .p-right  { transform: translateX(550px) rotate(12deg); }
-
-.orbit-2 .pill-box { transform: translateX(-550px) rotate(-12deg); }
-.orbit-2 .p-right  { transform: translateX(550px) rotate(-12deg); }
+/* Orbit 2 Placement */
+.orbit-2 .p-left  { transform: translateX(-550px) rotate(-12deg); }
+.orbit-2 .p-right { transform: translateX(550px) rotate(-12deg); }
 
 /* --- HOVER EFFECTS --- */
-.orbit-1 .pill-box:hover { transform: translateX(-550px) rotate(12deg) scale(1.05) translateY(-10px); }
-.orbit-1 .p-right:hover  { transform: translateX(550px) rotate(12deg) scale(1.05) translateY(-10px); }
+.orbit-1 .p-left:hover { transform: translateX(-550px) rotate(12deg) scale(1.05) translateY(-10px); }
+.orbit-1 .p-right:hover { transform: translateX(550px) rotate(12deg) scale(1.05) translateY(-10px); }
 
-.orbit-2 .pill-box:hover { transform: translateX(-550px) rotate(-12deg) scale(1.05) translateY(-10px); }
-.orbit-2 .p-right:hover  { transform: translateX(550px) rotate(-12deg) scale(1.05) translateY(-10px); }
+.orbit-2 .p-left:hover { transform: translateX(-550px) rotate(-12deg) scale(1.05) translateY(-10px); }
+.orbit-2 .p-right:hover { transform: translateX(550px) rotate(-12deg) scale(1.05) translateY(-10px); }
 
-/* --- RADIAL GRADIENTS --- */
+/* --- BACKGROUNDS --- */
 .bg-orange { background: radial-gradient(circle at 30% 25%, #ffda7a 0%, #fb8500 30%, #ffb703 60%, #5e3200 100%); }
 .bg-blue   { background: radial-gradient(circle at 30% 25%, #7ee0da 0%, #00b4d8 30%, #0077b6 60%, #023e8a 100%); }
-.bg-green { background: radial-gradient(circle at 30% 25%, #ffd6ef 0%, #f07ac6 30%, #a58cff 60%, #2b1f3f 100%); }
-.bg-purple  { background: radial-gradient(circle at 30% 25%, #d1f7ff 0%, #06d6a0 30%, #118ab2 60%, #064a61 100%); }
+.bg-purple { background: radial-gradient(circle at 30% 25%, #ffd6ef 0%, #f07ac6 30%, #a58cff 60%, #2b1f3f 100%); }
+.bg-green  { background: radial-gradient(circle at 30% 25%, #d1f7ff 0%, #06d6a0 30%, #118ab2 60%, #064a61 100%); }
 
 /* --- ICON & TEXT --- */
 .pill-icon {
-  font-size: 24px;
-  width: 48px;
-  height: 48px;
+  font-size: 24px; width: 48px; height: 48px;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(5px);
   border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
-.pill-content h3 { font-size: 19px; margin-bottom: 4px; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+.pill-content h3 { font-size: 19px; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 .pill-content p { font-size: 13px; line-height: 1.4; color: rgba(255, 255, 255, 0.9); }
 
 /* --- CENTER SPHERE --- */
 .sphere-wrap {
   position: relative;
   z-index: 10;
-  width: 440px;
-  height: 440px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 .sphere {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 440px;
+  height: 440px;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 25%, #ffd6ef 0%, #f07ac6 20%, #a58cff 40%, #7ee0da 70%, #2a1f3f 100%);
   box-shadow: inset -30px -30px 60px rgba(0,0,0,0.5), 0 0 100px rgba(165,140,255,0.25);
 }
+.sphere-text { position: relative; z-index: 11; text-align: center; }
 .sphere-main-text {
   font-family: "Playfair Display", serif;
   font-size: 62px;
   letter-spacing: 4px;
   color: white;
-  font-weight: bold;
 }
-.spark { display: block; text-align: center; font-size: 24px; margin-bottom: 5px; color: aliceblue; }
+.spark { font-size: 24px; color: aliceblue; }
