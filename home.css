@@ -27,7 +27,7 @@ body {
   z-index: 100;
 }
 .logo { font-weight: 600; letter-spacing: 2px; }
-.links a { color: #9ca3af; margin: 0 20px; font-size: 14px; text-decoration: none; transition: 0.3s; }
+.links a { color: #9ca3af; margin: 0 20px; font-size: 14px; text-decoration: none; transition: 0.3s; lin;}
 .links a:hover { color: #fff; }
 
 .cta {
@@ -148,3 +148,7 @@ body {
   color: white;
 }
 .spark { font-size: 24px; color: aliceblue; }
+
+a{
+  text-decoration: none;
+}
