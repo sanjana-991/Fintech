@@ -108,8 +108,8 @@ body {
 /* --- BACKGROUNDS --- */
 .bg-orange { background: radial-gradient(circle at 30% 25%, #ffda7a 0%, #fb8500 30%, #ffb703 60%, #5e3200 100%); }
 .bg-blue   { background: radial-gradient(circle at 30% 25%, #7ee0da 0%, #00b4d8 30%, #0077b6 60%, #023e8a 100%); }
-.bg-purple { background: radial-gradient(circle at 30% 25%, #ffd6ef 0%, #f07ac6 30%, #a58cff 60%, #2b1f3f 100%); }
-.bg-green  { background: radial-gradient(circle at 30% 25%, #d1f7ff 0%, #06d6a0 30%, #118ab2 60%, #064a61 100%); }
+.bg-purple { background: radial-gradient(circle at 30% 25%, #d1f7ff 0%, #06d6a0 30%, #118ab2 60%, #064a61 100%); }
+.bg-green  { background: radial-gradient(circle at 30% 25%, #ffd6ef 0%, #f07ac6 30%, #a58cff 60%, #2b1f3f 100%); }
 
 /* --- ICON & TEXT --- */
 .pill-icon {
